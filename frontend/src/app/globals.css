@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #fcfaf7;
+    --foreground: #1a2a3a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #1a2a3a;
+        --foreground: #fcfaf7;
+    }
+}
+
+/* src/app/globals.css */
+body {
+    background-color: #fcfaf7; /* Exact logo cream color */
+    margin: 0;
+    color: #1a2a3a; /* Navy color from 'EPI' for your text */
+}

@@ -61,8 +61,8 @@ REST_FRAMEWORK = {
     ( 'rest_framework_simplejwt.authentication.JWTAuthentication', ),
 }
 
-SIMPLE_JWT = { 'ACCESS_TOKEN_LIFETIME': timedelta(days=7), 
-            'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+SIMPLE_JWT = { 'ACCESS_TOKEN_LIFETIME': timedelta(days=2), 
+            'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
 }
 
 MIDDLEWARE = [
@@ -99,6 +99,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# Custom User Model
+AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

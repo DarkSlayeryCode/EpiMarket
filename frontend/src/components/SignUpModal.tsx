@@ -1,9 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 
 const SignUpModal = ({ isOpen, onClose, switchToLogin }) => {
+  // 1. Added state for role selection
+  const [role, setRole] = useState("client");
+
   if (!isOpen) return null;
 
   return (
@@ -16,17 +19,34 @@ const SignUpModal = ({ isOpen, onClose, switchToLogin }) => {
 
           <div className="form">
             <Image
-              src="/Logo.png" // Ensure this matches your filename in /public
+              src="/Logo.png"
               alt="EpiMarket Logo"
               className="logo-img"
-              width={80} // Added
-              height={80} // Added
+              width={80}
+              height={80}
             />
-            {/*<Logo size={80} />*/}
             <span className="title">Join EpiMarket</span>
             <span className="subtitle">
               Les courses le ventre plein, sans stress.
             </span>
+
+            {/* 2. Added Role Selection Menu */}
+            <div className="role-container">
+              <button
+                type="button"
+                className={`role-btn ${role === "client" ? "active" : ""}`}
+                onClick={() => setRole("client")}
+              >
+                Client
+              </button>
+              <button
+                type="button"
+                className={`role-btn ${role === "vendeur" ? "active" : ""}`}
+                onClick={() => setRole("vendeur")}
+              >
+                Vendeur
+              </button>
+            </div>
 
             <div className="form-container">
               <input type="text" className="input" placeholder="Full Name" />
@@ -34,7 +54,10 @@ const SignUpModal = ({ isOpen, onClose, switchToLogin }) => {
               <input type="password" className="input" placeholder="Password" />
             </div>
 
-            <button className="signup-btn">Sign up</button>
+            {/* 3. Button text now reflects the role */}
+            <button className="signup-btn">
+              Sign up as {role === "client" ? "Client" : "Vendeur"}
+            </button>
           </div>
 
           <div className="form-section">
@@ -62,10 +85,10 @@ const ModalBackdrop = styled.div`
 const StyledWrapper = styled.div`
   .form-box {
     max-width: 340px;
-    background: #fcfaf7; /* Logo Cream */
+    background: #fcfaf7;
     overflow: hidden;
     border-radius: 25px;
-    color: #1a2a3a; /* Logo Navy */
+    color: #1a2a3a;
     position: relative;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     border: 1px solid white;
@@ -100,8 +123,38 @@ const StyledWrapper = styled.div`
 
   .subtitle {
     font-size: 0.85rem;
-    color: #4a5d23; /* Logo Green */
+    color: #4a5d23;
+    margin-bottom: 5px;
+  }
+
+  /* --- Role Selector Styles --- */
+  .role-container {
+    display: flex;
+    width: 100%;
+    background: #f3f0eb;
+    padding: 4px;
+    border-radius: 12px;
     margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .role-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #1a2a3a;
+  }
+
+  .role-btn.active {
+    background-color: #4a5d23; /* Logo Green */
+    color: white;
+    box-shadow: 0 4px 10px rgba(74, 93, 35, 0.2);
   }
 
   .form-container {
@@ -131,7 +184,7 @@ const StyledWrapper = styled.div`
   .form-section {
     padding: 16px;
     font-size: 0.85rem;
-    background-color: #f3f0eb; /* Slightly darker cream */
+    background-color: #f3f0eb;
     text-align: center;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
@@ -140,13 +193,13 @@ const StyledWrapper = styled.div`
     background: none;
     border: none;
     font-weight: bold;
-    color: #8b2626; /* Logo Burgundy */
+    color: #8b2626;
     cursor: pointer;
     text-decoration: underline;
   }
 
   .signup-btn {
-    background-color: #4a5d23; /* Logo Green */
+    background-color: #4a5d23;
     color: #fff;
     border: 0;
     border-radius: 12px;
@@ -156,7 +209,7 @@ const StyledWrapper = styled.div`
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
   .signup-btn:hover {

@@ -13,4 +13,7 @@ class IsAdmin(permissions.BasePermission):
             return True
         if request.method in permissions.SAFE_METHODS:
             return True
-        return obj == request.user
+        return request.user.is_authenticated and obj == request.user
+
+    def has_permission(self, request, view):
+        return True

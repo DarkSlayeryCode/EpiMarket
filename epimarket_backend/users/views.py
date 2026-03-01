@@ -9,22 +9,20 @@
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from users.models import User
-from users.permissions import IsAdmin
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from users.permissions import UserPermissions
+from rest_framework.permissions import AllowAny
 from users.serializers import UserSerializer, PublicUserSerializer, PrivateUserSerializer, AdminUserSerializer, RegisterSerializer
 
-class UserViewset(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAdmin]
+    permission_classes = [UserPermissions]
 
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return self.queryset
+            return User.objects.all()
         return self.queryset.filter(role="SELLER")
 
     def get_serializer_class(self):

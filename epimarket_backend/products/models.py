@@ -14,7 +14,7 @@ class Product(models.Model):
     price = models.PositiveIntegerField(null=True, blank=False)
     quantity = models.PositiveIntegerField(null=True, blank=False)
     description = models.TextField(help_text='A little description of your product', blank=False, max_length=75)
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'roles' : 'SELLER'})
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role' : 'SELLER'})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)

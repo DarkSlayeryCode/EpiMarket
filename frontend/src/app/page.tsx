@@ -6,6 +6,8 @@ import Image from "next/image";
 import LoginButton from "../components/LoginButton";
 import SignUpButton from "../components/SignUpButton";
 import SearchBar from "../components/SearchBar";
+import BusinessCard from "../components/BusinessCard";
+import GoodsCard from "../components/GoodsCard";
 
 export default function Home() {
   const [modalMode, setModalMode] = useState<"none" | "login" | "signup">(
@@ -72,6 +74,97 @@ export default function Home() {
           </div>
         </div>
       </nav>
+
+      {/* --- Section 1: Business/Shops --- */}
+      <section style={{ marginTop: "60px" }}>
+        <h2
+          style={{
+            color: "#1a2a3a",
+            marginBottom: "24px",
+            fontSize: "1.8rem",
+            fontWeight: 900,
+          }}
+        >
+          Nos Boutiques Partenaires
+        </h2>
+        <div style={{ display: "flex", gap: "25px", flexWrap: "wrap" }}>
+          <BusinessCard
+            businessName="Le Verger d'Antan"
+            category="Producteur"
+            description="Fruits et légumes bios direct producteur."
+          />
+          <BusinessCard
+            businessName="Boulangerie Epi"
+            category="Artisan"
+            description="Pains au levain et viennoiseries maison."
+          />
+        </div>
+      </section>
+
+      {/* --- Section 2: Goods/Products --- */}
+      <section style={{ marginTop: "80px" }}>
+        <h2
+          style={{
+            color: "#1a2a3a",
+            marginBottom: "24px",
+            fontSize: "1.8rem",
+            fontWeight: 900,
+          }}
+        >
+          Produits du Moment
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: "30px",
+          }}
+        >
+          {/* Test 1: High Stock / Bio */}
+          <GoodsCard
+            title="Pommes Gala"
+            price="3.20€"
+            unit="le kg"
+            badge="BIO"
+            shopName="Verger d'Antan"
+            location="Cotonou - 2km"
+            stock={12}
+          />
+
+          {/* Test 2: Low Stock / Promo */}
+          <GoodsCard
+            title="Baguette Tradition"
+            price="1.10€"
+            unit="la pièce"
+            badge="FRAIS"
+            shopName="Boulangerie Epi"
+            location="Cotonou - 1km"
+            stock={3}
+          />
+
+          {/* Test 3: Out of Stock */}
+          <GoodsCard
+            title="Miel de Fleurs"
+            price="8.50€"
+            unit="le pot"
+            badge="LOCAL"
+            shopName="Rucher du Bénin"
+            location="Ouidah - 40km"
+            stock={0}
+          />
+
+          {/* Test 4: Pasta */}
+          <GoodsCard
+            title="Pâtes Artisanales"
+            price="4.50€"
+            unit="500g"
+            badge="NEW"
+            shopName="Pasta Casa"
+            location="Cotonou - 5km"
+            stock={8}
+          />
+        </div>
+      </section>
 
       {/* Modals */}
       <LoginModal

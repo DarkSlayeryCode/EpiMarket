@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import styled from "styled-components";
+import Image from "next/image";
+
+// Components
 import GoodsCard from "../../components/GoodsCard";
 import SearchBar from "../../components/SearchBar";
+import Cart from "../../components/Cart";
 
-// Dummy Data
+// Dummy Data for testing the grid
 const EXAMPLE_PRODUCTS = [
   {
     id: 1,
@@ -61,50 +65,69 @@ const EXAMPLE_PRODUCTS = [
 
 export default function CatalogPage() {
   const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
 
+  // Fix hydration issues by waiting for client mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // URL Filters
   const shopFilter = searchParams.get("shop");
   const categoryFilter = searchParams.get("category");
   const searchQuery = searchParams.get("search");
 
-  // Logic for Dynamic Content
+  // Dynamic Content Logic
   const displayTitle =
     shopFilter ||
     categoryFilter ||
     (searchQuery ? `"${searchQuery}"` : "Notre Catalogue");
 
-  // This is where you will eventually plug in the image from your backend
-  // If 'backendImageUrl' is null/undefined, it will show '/Logo.png'
-  const backendImageUrl = null;
+  // Background Image Logic: Use specific image if available, otherwise fallback to logo
+  const backendImageUrl = null; // Set this to your dynamic URL later
   const headerImage = backendImageUrl || "/Logo.png";
+
+  if (!mounted) return null;
 
   return (
     <CatalogWrapper>
-      {/* Header with Dynamic Background */}
-      <header
-        className="catalog-header"
-        style={{
-          backgroundImage: `url(${headerImage})`,
-          backgroundSize: backendImageUrl ? "cover" : "contain", // Logo stays contained, real images cover
-        }}
-      >
-        {/* Semi-transparent overlay to ensure text is readable over any image */}
-        <div className="header-overlay" />
+      {/* Crisp Header Section */}
+      <header className="catalog-header">
+        {/* Background Image/Logo Fallback Container */}
+        <div className="bg-container">
+          <Image
+            src={headerImage}
+            alt="Header Background"
+            fill
+            priority
+            className="header-bg-img"
+            style={{
+              objectFit: backendImageUrl ? "cover" : "contain",
+              opacity: backendImageUrl ? 0.4 : 0.1, // Logo is more subtle
+            }}
+          />
+        </div>
 
+        {/* Clean content overlay */}
         <div className="header-content">
           <div className="title-area">
-            <p className="context-label">{shopFilter ? "Boutique" : "Rayon"}</p>
+            {(shopFilter || categoryFilter) && (
+              <span className="context-label">
+                {shopFilter ? "Boutique" : "Rayon"}
+              </span>
+            )}
             <h1>{displayTitle}</h1>
             <p className="subtitle">
               {EXAMPLE_PRODUCTS.length} produits trouvés
             </p>
           </div>
-
           <div className="search-container">
             <SearchBar defaultValue={searchQuery || ""} />
           </div>
         </div>
       </header>
 
+      {/* Results Section */}
       <section className="results-container">
         <div className="product-grid">
           {EXAMPLE_PRODUCTS.map((product) => (
@@ -121,6 +144,9 @@ export default function CatalogPage() {
           ))}
         </div>
       </section>
+
+      {/* Movable Cart Component */}
+      <Cart />
     </CatalogWrapper>
   );
 }
@@ -128,14 +154,12 @@ export default function CatalogPage() {
 const CatalogWrapper = styled.main`
   background-color: #fcfaf7;
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
 
   .catalog-header {
     position: relative;
-    height: 350px;
-    background-color: #ffffff;
-    background-repeat: no-repeat;
-    background-position: center;
+    height: 320px;
+    background-color: white;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -144,21 +168,19 @@ const CatalogWrapper = styled.main`
     overflow: hidden;
   }
 
-  .header-overlay {
+  .bg-container {
     position: absolute;
     inset: 0;
-    /* Gradient goes from light/transparent at top to your brand navy at bottom */
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(26, 42, 58, 0.8) 100%
-    );
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
   }
 
   .header-content {
     position: relative;
-    z-index: 2;
+    z-index: 5;
     width: 90%;
     max-width: 1200px;
     display: flex;
@@ -168,38 +190,39 @@ const CatalogWrapper = styled.main`
   }
 
   .context-label {
-    color: #4a5d23; /* Green */
-    background: #ffffff;
-    display: inline-block;
-    padding: 2px 10px;
+    background: #4a5d23;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 12px;
     border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 900;
     text-transform: uppercase;
     margin-bottom: 10px;
+    display: inline-block;
   }
 
   .title-area h1 {
-    color: #ffffff;
+    color: #1a2a3a;
     font-size: 3.2rem;
     font-weight: 900;
     margin: 0;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    line-height: 1;
   }
 
   .subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-    margin-top: 5px;
+    color: #4a5d23;
+    font-weight: 800;
+    margin-top: 10px;
     font-size: 1rem;
+    letter-spacing: 0.5px;
   }
 
   .search-container {
     width: 380px;
-    background: #ffffff;
+    background: white;
     padding: 8px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   }
 
   .results-container {
@@ -210,7 +233,7 @@ const CatalogWrapper = styled.main`
 
   .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 30px;
     justify-items: center;
   }
@@ -218,14 +241,15 @@ const CatalogWrapper = styled.main`
   @media (max-width: 768px) {
     .header-content {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
+      text-align: center;
     }
     .search-container {
       width: 100%;
-      margin-top: 20px;
+      margin-top: 30px;
     }
     .title-area h1 {
-      font-size: 2.4rem;
+      font-size: 2.2rem;
     }
   }
 `;

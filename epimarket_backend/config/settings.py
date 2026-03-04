@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'carts',
+    'notifications',
     'rest_framework_simplejwt',
     'corsheaders',
 ]

@@ -14,26 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.routers import SimpleRouter
-from users.models import User
 from users.views import UserViewSet, RegisterView
-from products.models import Product
 from products.views import ProductViewSet
+from carts.views import CartItemViewSet, CartView
+from orders.views import OrderViewSet
 from django.urls import path, include
-
-admin.site.register(User)
-admin.site.register(Product)
 
 router = SimpleRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('products', ProductViewSet, basename='products')
+router.register('cart-items', CartItemViewSet, basename='cart-items')
+router.register('orders', OrderViewSet, basename='orders')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register/', RegisterView.as_view(), name='register'),
     path('api/login/', TokenObtainPairView.as_view(), name='login'),
     path('api/login/refresh/', TokenRefreshView.as_view(), name='re-login'),
+    path('api/carts/', CartView.as_view(), name='carts'),
     path('api/', include(router.urls)),
 ]

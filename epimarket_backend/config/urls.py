@@ -23,6 +23,7 @@ from users.views import UserViewSet, RegisterView
 from products.views import ProductViewSet
 from carts.views import CartItemViewSet, CartView
 from orders.views import OrderViewSet
+from notifications.views import NotificationViewSet
 from django.urls import path, include
 
 router = SimpleRouter()
@@ -30,6 +31,7 @@ router.register('users', UserViewSet, basename='users')
 router.register('products', ProductViewSet, basename='products')
 router.register('cart-items', CartItemViewSet, basename='cart-items')
 router.register('orders', OrderViewSet, basename='orders')
+router.register('notifications', NotificationViewSet, basename='notifications')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

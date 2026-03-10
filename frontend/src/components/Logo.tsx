@@ -1,231 +1,67 @@
 "use client";
 import React from "react";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import styled from "styled-components";
-import GoodsCard from "../../components/GoodsCard";
-import SearchBar from "../../components/SearchBar";
+import { motion } from "framer-motion";
 
-// Dummy Data
-const EXAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    title: "Pommes Gala",
-    price: "3.20€",
-    unit: "kg",
-    shopName: "Verger d'Antan",
-    category: "Fruits",
-    location: "Cotonou",
-    stock: 12,
-  },
-  {
-    id: 2,
-    title: "Baguette Tradition",
-    price: "1.10€",
-    unit: "pc",
-    shopName: "Boulangerie Epi",
-    category: "Boulangerie",
-    location: "Cotonou",
-    stock: 5,
-  },
-  {
-    id: 3,
-    title: "Miel de Fleurs",
-    price: "8.50€",
-    unit: "pot",
-    shopName: "Rucher du Bénin",
-    category: "Epicerie",
-    location: "Ouidah",
-    stock: 0,
-  },
-  {
-    id: 4,
-    title: "Pâtes Artisanales",
-    price: "4.50€",
-    unit: "500g",
-    shopName: "Pasta Casa",
-    category: "Epicerie",
-    location: "Cotonou",
-    stock: 8,
-  },
-  {
-    id: 5,
-    title: "Lait Frais",
-    price: "2.10€",
-    unit: "Litre",
-    shopName: "Ferme d'Epi",
-    category: "Crèmerie",
-    location: "Cotonou",
-    stock: 15,
-  },
-];
-
-export default function CatalogPage() {
-  const searchParams = useSearchParams();
-
-  const shopFilter = searchParams.get("shop");
-  const categoryFilter = searchParams.get("category");
-  const searchQuery = searchParams.get("search");
-
-  // Logic for Dynamic Content
-  const displayTitle =
-    shopFilter ||
-    categoryFilter ||
-    (searchQuery ? `"${searchQuery}"` : "Notre Catalogue");
-
-  // This is where you will eventually plug in the image from your backend
-  // If 'backendImageUrl' is null/undefined, it will show '/Logo.png'
-  const backendImageUrl = null;
-  const headerImage = backendImageUrl || "/Logo.png";
-
+export default function Logo() {
   return (
-    <CatalogWrapper>
-      {/* Header with Dynamic Background */}
-      <header
-        className="catalog-header"
-        style={{
-          backgroundImage: `url(${headerImage})`,
-          backgroundSize: backendImageUrl ? "cover" : "contain", // Logo stays contained, real images cover
-        }}
+    <LogoLink href="/">
+      <motion.div
+        whileHover={{ scale: 1.05, rotate: -3 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
-        {/* Semi-transparent overlay to ensure text is readable over any image */}
-        <div className="header-overlay" />
-
-        <div className="header-content">
-          <div className="title-area">
-            <p className="context-label">{shopFilter ? "Boutique" : "Rayon"}</p>
-            <h1>{displayTitle}</h1>
-            <p className="subtitle">
-              {EXAMPLE_PRODUCTS.length} produits trouvés
-            </p>
-          </div>
-
-          <div className="search-container">
-            <SearchBar defaultValue={searchQuery || ""} />
-          </div>
-        </div>
-      </header>
-
-      <section className="results-container">
-        <div className="product-grid">
-          {EXAMPLE_PRODUCTS.map((product) => (
-            <GoodsCard
-              key={product.id}
-              title={product.title}
-              price={product.price}
-              unit={product.unit}
-              shopName={product.shopName}
-              location={product.location}
-              stock={product.stock}
-              badge={product.category === "Fruits" ? "BIO" : "NEW"}
-            />
-          ))}
-        </div>
-      </section>
-    </CatalogWrapper>
+        <ImageWrapper>
+          <Image
+            src="/basket.png"
+            alt="EpiMarket Logo"
+            fill
+            priority // High priority loading for the logo
+            style={{ objectFit: "contain" }}
+          />
+        </ImageWrapper>
+      </motion.div>
+      <LogoText>
+        Epi<span>Market</span>
+      </LogoText>
+    </LogoLink>
   );
 }
 
-const CatalogWrapper = styled.main`
-  background-color: #fcfaf7;
-  min-height: 100vh;
-  padding-bottom: 100px;
+// --- STYLES ---
 
-  .catalog-header {
-    position: relative;
-    height: 350px;
-    background-color: #ffffff;
-    background-repeat: no-repeat;
-    background-position: center;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    border-bottom: 2px solid #1a2a3a;
-    margin-bottom: 40px;
-    overflow: hidden;
+const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  width: fit-content;
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 45px;
+  height: 45px;
+
+  /* Adds a subtle shadow to the basket to make it pop */
+  filter: drop-shadow(0px 4px 6px rgba(26, 42, 58, 0.15));
+`;
+
+const LogoText = styled.h2`
+  color: #1a2a3a; /* Your Brand Navy */
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 0;
+
+  span {
+    color: #4a5d23; /* Your Brand Green */
   }
 
-  .header-overlay {
-    position: absolute;
-    inset: 0;
-    /* Gradient goes from light/transparent at top to your brand navy at bottom */
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(26, 42, 58, 0.8) 100%
-    );
-    z-index: 1;
-  }
-
-  .header-content {
-    position: relative;
-    z-index: 2;
-    width: 90%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding-bottom: 40px;
-  }
-
-  .context-label {
-    color: #4a5d23; /* Green */
-    background: #ffffff;
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .title-area h1 {
-    color: #ffffff;
-    font-size: 3.2rem;
-    font-weight: 900;
-    margin: 0;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  .subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-    margin-top: 5px;
-    font-size: 1rem;
-  }
-
-  .search-container {
-    width: 380px;
-    background: #ffffff;
-    padding: 8px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-
-  .results-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 30px;
-    justify-items: center;
-  }
-
-  @media (max-width: 768px) {
-    .header-content {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .search-container {
-      width: 100%;
-      margin-top: 20px;
-    }
-    .title-area h1 {
-      font-size: 2.4rem;
-    }
+  @media (max-width: 480px) {
+    display: none; /* Optional: hide text on very small mobile screens */
   }
 `;

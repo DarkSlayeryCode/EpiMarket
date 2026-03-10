@@ -8,6 +8,7 @@ import Image from "next/image";
 import GoodsCard from "../../components/GoodsCard";
 import SearchBar from "../../components/SearchBar";
 import Cart from "../../components/Cart";
+import Logo from "../../components/Logo"; // Integrated Logo component
 
 // Dummy Data for testing the grid
 const EXAMPLE_PRODUCTS = [
@@ -67,33 +68,32 @@ export default function CatalogPage() {
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
 
-  // Fix hydration issues by waiting for client mount
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // URL Filters
   const shopFilter = searchParams.get("shop");
   const categoryFilter = searchParams.get("category");
   const searchQuery = searchParams.get("search");
 
-  // Dynamic Content Logic
   const displayTitle =
     shopFilter ||
     categoryFilter ||
     (searchQuery ? `"${searchQuery}"` : "Notre Catalogue");
 
-  // Background Image Logic: Use specific image if available, otherwise fallback to logo
-  const backendImageUrl = null; // Set this to your dynamic URL later
+  const backendImageUrl = null;
   const headerImage = backendImageUrl || "/Logo.png";
 
   if (!mounted) return null;
 
   return (
     <CatalogWrapper>
-      {/* Crisp Header Section */}
       <header className="catalog-header">
-        {/* Background Image/Logo Fallback Container */}
+        {/* TOP LEFT LOGO POSITIONING */}
+        <div className="logo-container">
+          <Logo />
+        </div>
+
         <div className="bg-container">
           <Image
             src={headerImage}
@@ -103,12 +103,11 @@ export default function CatalogPage() {
             className="header-bg-img"
             style={{
               objectFit: backendImageUrl ? "cover" : "contain",
-              opacity: backendImageUrl ? 0.4 : 0.1, // Logo is more subtle
+              opacity: backendImageUrl ? 0.4 : 0.1,
             }}
           />
         </div>
 
-        {/* Clean content overlay */}
         <div className="header-content">
           <div className="title-area">
             {(shopFilter || categoryFilter) && (
@@ -127,7 +126,6 @@ export default function CatalogPage() {
         </div>
       </header>
 
-      {/* Results Section */}
       <section className="results-container">
         <div className="product-grid">
           {EXAMPLE_PRODUCTS.map((product) => (
@@ -145,7 +143,6 @@ export default function CatalogPage() {
         </div>
       </section>
 
-      {/* Movable Cart Component */}
       <Cart />
     </CatalogWrapper>
   );
@@ -166,6 +163,14 @@ const CatalogWrapper = styled.main`
     border-bottom: 2px solid #1a2a3a;
     margin-bottom: 40px;
     overflow: hidden;
+  }
+
+  /* Absolute positioning for the Logo */
+  .logo-container {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10; /* Ensures it stays above the bg-container */
   }
 
   .bg-container {
@@ -239,6 +244,10 @@ const CatalogWrapper = styled.main`
   }
 
   @media (max-width: 768px) {
+    .logo-container {
+      left: 20px;
+      top: 20px;
+    }
     .header-content {
       flex-direction: column;
       align-items: center;

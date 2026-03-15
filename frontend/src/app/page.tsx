@@ -62,12 +62,12 @@ export default function Home() {
         <HeroSection>
           <div className="hero-content">
             <h1>
-              Le marché local, <br />
-              <span>directement chez vous.</span>
+              Vos articles préférés, <br />
+              <span>directement dans votre poche.</span>
             </h1>
             <p>
-              Découvrez les meilleurs produits de Cotonou et soutenez vos
-              artisans locaux.
+              Achetez vos produits préférés chez vos vendeurs habituels sans
+              stress!
             </p>
             <div className="cta-row">
               <button
@@ -86,10 +86,10 @@ export default function Home() {
           </div>
           <div className="hero-image">
             <Image
-              src="/basket.png"
+              src="/Logo.png"
               alt="Basket"
-              width={300}
-              height={300}
+              width={500}
+              height={500}
               priority
             />
           </div>
